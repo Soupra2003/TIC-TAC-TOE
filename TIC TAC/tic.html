@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, rgb(5, 99, 171) ,rgb(169, 7, 88));
+        }
+        body h1{
+            color: white;
+            font-size: 3rem;
+            font-family: "Times New Roman", Times, serif;
+            
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            text-align: center;
+            align-items: center;
+            
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 36px;
+            text-align:center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            border: 1px solid black;
+            background: linear-gradient(transparent,white);
+    
+        }
+        .cell input{
+            text-align: center;
+        }
+        .cell:hover {
+            background: linear-gradient(transparent,rgb(255, 72, 228));
+        }
+        #message {
+            font-size: 24px;
+            margin-top: 20px;
+            color: white;
+        }
+        .btn{
+            margin-top: 15px;
+            color: #ffeaa0;
+            background-color: black;
+            padding: 12px 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 10px;
+
+        }
+        #btn2{
+            margin-top: 15px;
+            color: #ffeaa0;
+            background-color: black;
+            padding: 12px 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div id="message">Player X's turn</div>
+    <button id="btn2">New Game</button>
+    <div class="board" id="board"></div>
+    <button class="btn">Reset Game</button>
+    <h6>@souvikpra2</h2>
+
+        <script>
+    const board = document.getElementById("board");
+    const message = document.getElementById("message");
+    const btn2 = document.getElementById("btn2");
+    const btnReset = document.querySelector(".btn");
+    let currentPlayer = "X";
+    let boardState = ["", "", "", "", "", "", "", "", ""];
+
+    function checkWinner() {
+        const winningCombos = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        for (const combo of winningCombos) {
+            const [a, b, c] = combo;
+            if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                message.textContent = `Congratulations, Player ${boardState[a]} wins!`;
+                return true;
+            }
+        }
+
+        if (!boardState.includes("")) {
+            message.textContent = "It's a draw!";
+            return true;
+        }
+
+        return false;
+    }
+
+    function handleClick(index) {
+        if (boardState[index] === "" && !checkWinner()) {
+            boardState[index] = currentPlayer;
+            board.children[index].textContent = currentPlayer;
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            message.textContent = `Player ${currentPlayer}'s turn`;
+            checkWinner();
+        }
+    }
+
+    function createCell(index) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.addEventListener("click", () => handleClick(index));
+        return cell;
+    }
+
+    function resetGame() {
+        boardState = ["", "", "", "", "", "", "", "", ""];
+        board.childNodes.forEach((cell, index) => {
+            cell.textContent = "";
+        });
+        message.textContent = "Player X's turn";
+        currentPlayer = "X";
+    }
+
+    function newGame() {
+        resetGame();
+    }
+
+    for (let i = 0; i < 9; i++) {
+        board.appendChild(createCell(i));
+    }
+
+    btn2.addEventListener("click", newGame);
+    btnReset.addEventListener("click", resetGame);
+</script>
+</body>
+</html>
